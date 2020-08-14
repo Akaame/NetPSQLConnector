@@ -1,0 +1,29 @@
+version: "3"
+
+networks: 
+    appnetwork:
+
+services:
+    psql:
+        image: postgres
+        environment: 
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_DB: db_development
+        volumes: 
+            - ./postgres-data:/var/lib/postgresql/data
+        networks:
+            - appnetwork
+        ports: 
+            - "5432:5432"
+
+    sample:
+        build: 
+            context: .
+        depends_on: 
+            - psql
+        networks: 
+            - appnetwork
+        environment: 
+            PSQL_HOST: psql
+            PSQL_PORT: 5432
